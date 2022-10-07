@@ -3,11 +3,12 @@
 // PART 1: SHOW A FORTUNE
 
 function showFortune(evt) {
+  evt.preventDefault();
   // TODO: get the fortune and show it in the #fortune-text div
   fetch('/fortune')
-    .then((response) => response.json())
+    .then((response) => response.text())
     .then((responseData) => {
-      document.querySelector('#fortune-text').innerText = responseData;
+      document.querySelector('#fortune-text').innerHTML = responseData;
     });
 }
 
@@ -36,6 +37,18 @@ document.querySelector('#weather-form').addEventListener('submit', showWeather);
 
 // PART 3: ORDER MELONS
 
+function updateMelons(results) {
+  if (results.code === 'OK') {
+    document.querySelector('#order-status').classList.remove('order-error');
+    document.querySelector('#order-status').innerHTML = `<p>${results.msg}</p>`;
+    console.log('print');
+  } else {
+    document.querySelector('#order-status').classList.add('order-error');
+    document.querySelector('#order-status').innerHTML = `<p><b>${results.msg}</b></p>`;
+    console.log(document.querySelector('#order-status').classList);
+  }
+}
+
 function orderMelons(evt) {
   evt.preventDefault();
 
@@ -61,3 +74,17 @@ function orderMelons(evt) {
 
 document.querySelector('#order-form').addEventListener('submit', orderMelons);
 
+// Further Study:
+function dogImage(evt) {
+  evt.preventDefault();
+  const url = 'https://dog.ceo/api/breeds/image/random'
+  fetch(url)
+    .then((response) => response.json())
+    .then(responseDataJson => {
+      const img = responseDataJson.message
+      document.querySelector('#dog-image').innerHTML =  `<img src="${img}"/>`
+    })
+}
+
+
+document.querySelector('#get-dog-image').addEventListener('click', dogImage);
